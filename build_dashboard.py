@@ -170,13 +170,41 @@ def generate_dashboard():
         ::-webkit-scrollbar-track {{ background: transparent; }}
         ::-webkit-scrollbar-thumb {{ background: #334155; border-radius: 3px; }}
         ::-webkit-scrollbar-thumb:hover {{ background: #475569; }}
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {{
+            .mobile-sidebar-open {{ transform: translateX(0); }}
+            .mobile-sidebar-closed {{ transform: translateX(-100%); }}
+        }}
     </style>
 </head>
 <body class="h-screen flex overflow-hidden bg-[#0B1120]">
-     <!-- Sidebar -->
-    <aside class="w-64 flex-shrink-0 border-r border-slate-800/50 bg-[#0f172a] flex flex-col z-20">
-        <div class="p-6">
-            <div class="flex items-center gap-3 mb-8">
+    
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed top-0 w-full z-40 bg-[#0f172a]/90 backdrop-blur border-b border-slate-800/50 p-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                <i data-lucide="activity" class="text-white w-4 h-4"></i>
+            </div>
+            <span class="font-bold text-white">Visitas Angel</span>
+        </div>
+        <button onclick="toggleSidebar()" class="text-white p-2 hover:bg-slate-800 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar Wrapper -->
+    <!-- Mobile: Fixed full screen, initially hidden off-screen. Desktop: Relative, visible -->
+    <aside id="sidebar" class="fixed inset-0 z-50 md:relative md:z-auto w-64 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:flex md:flex-col bg-[#0f172a] border-r border-slate-800/50 flex-shrink-0">
+        <!-- Close Button Mobile -->
+        <div class="md:hidden absolute top-4 right-4">
+            <button onclick="toggleSidebar()" class="text-slate-400 p-2 hover:bg-slate-800 rounded-lg">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div class="p-6 h-full flex flex-col">
+            <div class="hidden md:flex items-center gap-3 mb-8">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                     <i data-lucide="activity" class="text-white"></i>
                 </div>
@@ -186,7 +214,7 @@ def generate_dashboard():
                 </div>
             </div>
             
-            <nav class="space-y-2">
+            <nav class="space-y-2 flex-1">
                 <div class="sidebar-link active" onclick="switchTab('dashboard', this)">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard</span>
@@ -195,36 +223,38 @@ def generate_dashboard():
                     <i data-lucide="users" class="w-5 h-5"></i>
                     <span>Médicos</span>
                 </div>
-                <!-- Removed Analytics dummy tab for cleanliness -->
             </nav>
-        </div>
-        
-        <div class="mt-auto p-6 border-t border-slate-800/50">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-slate-700 border border-slate-600"></div>
-                <div>
-                    <p class="text-sm font-medium text-white">Angel Pari</p>
-                    <p class="text-xs text-slate-500">Representante</p>
+            
+            <div class="mt-auto pt-6 border-t border-slate-800/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-slate-700 border border-slate-600"></div>
+                    <div>
+                        <p class="text-sm font-medium text-white">Angel Pari</p>
+                        <p class="text-xs text-slate-500">Representante</p>
+                    </div>
                 </div>
             </div>
         </div>
     </aside>
 
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden glass transition-opacity"></div>
+
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto bg-[url('https://tailwindcss.com/_next/static/media/hero-dark.9a75e54d.png')] bg-no-repeat bg-top bg-contain">
-        <div class="max-w-7xl mx-auto p-8 font-sans">
+    <main class="flex-1 overflow-y-auto bg-[url('https://tailwindcss.com/_next/static/media/hero-dark.9a75e54d.png')] bg-no-repeat bg-top bg-contain pt-16 md:pt-0">
+        <div class="max-w-7xl mx-auto p-4 md:p-8 font-sans">
             
             <!-- Dashboard View -->
             <div id="dashboard" class="tab-content active space-y-6">
                 <div class="flex justify-between items-end mb-2">
                     <div>
-                        <h2 class="text-3xl font-bold text-white mb-1">Resumen General</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-1">Resumen General</h2>
                         <p class="text-slate-400 text-sm">Panorama actual de visitas y cobertura médica.</p>
                     </div>
                 </div>
 
                 <!-- KPI Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                     <div class="card bg-gradient-to-br from-slate-800/50 to-slate-900/50 border-t border-blue-500/20 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                             <i data-lucide="layers" class="w-16 h-16 text-blue-400"></i>
@@ -308,19 +338,19 @@ def generate_dashboard():
             <!-- Doctors View -->
             <div id="doctors" class="tab-content space-y-6">
                 <!-- Header with search -->
-                <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 gap-4">
                     <div>
                         <h2 class="text-2xl font-bold text-white">Cartera de Médicos</h2>
                     </div>
-                    <div class="relative">
-                        <input type="text" id="searchInput" onkeyup="filterDoctors()" placeholder="Buscar médico..." class="bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 w-64 shadow-inner">
+                    <div class="relative w-full md:w-auto">
+                        <input type="text" id="searchInput" onkeyup="filterDoctors()" placeholder="Buscar médico..." class="bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500 w-full md:w-64 shadow-inner">
                         <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-2.5"></i>
                     </div>
                 </div>
 
                 <div class="card overflow-hidden p-0 border border-slate-700/50">
                     <div class="overflow-x-auto max-h-[65vh]">
-                        <table class="w-full">
+                        <table class="w-full whitespace-nowrap">
                             <thead class="bg-slate-900/80 sticky top-0 z-10 backdrop-blur-md">
                                 <tr>
                                     <th class="w-1/3">Médico</th>
@@ -344,13 +374,13 @@ def generate_dashboard():
     <div id="modal" class="fixed inset-0 bg-black/90 hidden backdrop-blur-md z-50 transition-opacity duration-300 opacity-0 pointer-events-none flex items-center justify-center p-4">
         <div class="bg-[#1e293b] border border-slate-700 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl transform transition-all scale-95 duration-300" id="modalPanel">
             <!-- Modal Header -->
-            <div class="p-6 border-b border-slate-700/50 flex justify-between items-center bg-slate-800/50 rounded-t-2xl flex-shrink-0">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg shadow-inner">
+            <div class="p-4 md:p-6 border-b border-slate-700/50 flex justify-between items-center bg-slate-800/50 rounded-t-2xl flex-shrink-0">
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg shadow-inner">
                         <i data-lucide="user"></i>
                     </div>
                     <div>
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2" id="modalTitle">
+                        <h2 class="text-lg md:text-xl font-bold text-white flex items-center gap-2" id="modalTitle">
                             Historial
                         </h2>
                         <span class="text-xs text-slate-400 px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">Timeline de interacciones</span>
@@ -362,7 +392,7 @@ def generate_dashboard():
             </div>
             
             <!-- Modal Content -->
-            <div class="p-6 overflow-y-auto space-y-6" id="modalContent">
+            <div class="p-4 md:p-6 overflow-y-auto space-y-6" id="modalContent">
                 <!-- History Items -->
             </div>
         </div>
@@ -372,12 +402,31 @@ def generate_dashboard():
         lucide.createIcons();
         const data = {data_json};
 
+        // Sidebar Toggle Logic
+        function toggleSidebar() {{
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {{
+                overlay.classList.add('hidden');
+            }} else {{
+                overlay.classList.remove('hidden');
+            }}
+        }}
+
         // Navigation
         function switchTab(tabId, element) {{
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
             if(element) element.classList.add('active');
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth < 768) {{
+                toggleSidebar();
+            }}
         }}
 
         // Filter Logic
@@ -571,7 +620,8 @@ def generate_dashboard():
                 </td>
                 <td class="text-right">
                     <button onclick="showHistory(${{index}})" class="group flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg transition-all text-xs font-medium border border-blue-500/20 hover:border-blue-500/40">
-                        <span>Ver Historial</span>
+                        <span class="hidden md:inline">Ver Historial</span>
+                        <span class="md:hidden">Ver</span>
                         <i data-lucide="arrow-right" class="w-3 h-3 transition-transform group-hover:translate-x-0.5"></i>
                     </button>
                 </td>

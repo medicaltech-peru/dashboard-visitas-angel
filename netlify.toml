@@ -1,0 +1,3 @@
+[build]
+  publish = "."
+  command = "pip install -r requirements.txt && python build_dashboard.py"

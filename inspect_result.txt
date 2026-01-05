@@ -1,0 +1,42 @@
+COLUMNS:
+- Fecha de visita
+- Medico
+- Comentario
+- Ingreso
+- Salida
+- Estatus
+- Foto
+- Unnamed: 7
+
+SAMPLE MEDICOS:
+elizabeth narvaja
+gadif
+pascual medina
+eder oncebay
+rebaza
+juan vilcazan
+vania cusipuma
+vanessa angulo
+chávez de paz
+carina prado
+oscar pereda
+alicia barquinero
+chiaretta
+ronny de souza
+fabio tito
+gutierrez
+yherson mendoza
+okara
+julia maria del carmen barbosa
+cabello
+
+SAMPLE ROW 0:
+Fecha de visita                                  2025-09-26 00:00:00
+Medico                                             elizabeth narvaja
+Comentario         Se conversó con la doctora marielizabeth narva...
+Ingreso                                               10:41:07 a. m.
+Salida                                                 1:48:35 p. m.
+Estatus                                                     visitado
+Foto                                                             NaN
+Unnamed: 7                                                       NaN
+Name: 0, dtype: object

@@ -241,7 +241,7 @@ def generate_dashboard():
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden glass transition-opacity"></div>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto bg-[url('https://tailwindcss.com/_next/static/media/hero-dark.9a75e54d.png')] bg-no-repeat bg-top bg-contain pt-16 md:pt-0">
+    <main class="flex-1 overflow-y-auto bg-gradient-to-br from-[#0f172a] to-[#1e293b] pt-16 md:pt-0">
         <div class="max-w-7xl mx-auto p-4 md:p-8 font-sans">
             
             <!-- Dashboard View -->
@@ -310,7 +310,7 @@ def generate_dashboard():
                 <!-- Charts Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Monthly Chart with Strict Container -->
-                    <div class="card col-span-2 flex flex-col">
+                    <div class="card col-span-1 lg:col-span-2 flex flex-col">
                         <h3 class="text-lg font-semibold text-white mb-4">Tendencia de Visitas</h3>
                         <div class="relative h-64 w-full flex-1 min-h-[250px]"> <!-- Container height enforced -->
                             <canvas id="monthlyChart"></canvas>
